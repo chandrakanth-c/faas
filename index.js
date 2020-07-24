@@ -2,7 +2,6 @@ const aws = require("aws-sdk");
 var ddb = new aws.DynamoDB({ apiVersion: '2012-08-10' });
 aws.config.update({region: 'us-east-1'});
 var ses = new aws.SES();
-const uuidv4 = require('uuid/v4');
 
 exports.handler = function (event, context, callback) {
 
