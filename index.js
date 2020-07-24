@@ -37,15 +37,6 @@ var emailParams = {
     Source: "passwordlink@prod.chandrakanthchittappa.site"
 };
 
-    ses.sendEmail(emailParams).promise()
-    .then(function (data) {
-        console.log(data.MessageId);
-    })
-    .catch(function (err) {
-        console.error(err, err.stack);
-    });
-
-
     let putParams = {
         TableName: "csye6225",
         Item: {
