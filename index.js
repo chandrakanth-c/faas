@@ -5,12 +5,7 @@ var ses = new aws.SES();
 
 exports.handler = function (event, context, callback) {
 
-let msg = event.Records[0].Sns.Message;
-let msgDataJson = JSON.parse(JSON.parse(msg).data);
-
-let email = msgDataJson.Email;
-let resetLink = msgDataJson.link;
-
+let email = event.Records[0].Sns.Message;;
 let curTime = new Date().getTime();
 let ttl = 60 * 60 * 1000;
 let expTime = (curTime + ttl).toString();
@@ -18,14 +13,14 @@ let expTime = (curTime + ttl).toString();
 var emailParams = {
     Destination: {
         ToAddresses: [
-            'chittappa.c@northeastern.edu'
+            email
         ]
     },
     Message: {
         Body: {
             Text: {
                 Charset: "UTF-8",
-                Data:  resetLink
+                Data:  "Hi"
             }
         },
         Subject: {
@@ -36,75 +31,13 @@ var emailParams = {
     Source: "passwordlink@prod.chandrakanthchittappa.site"
 };
 
-let putParams = {
-    TableName : "PasswordLink",
-    Item : {
-        id : { S:email },
-        ttl : { N : expTime }
-    }
-};
-
-let queryParams = {
-    TableName : "PasswordLink",
-    Key : {
-        'id' : { S:email }
-    }
-};
-
-ddb.getItem(queryParams, (err,data) => {
-
-    if(err){
-        console.log(err);
-    }else{
-
-        if(data.Item == undefined){
-
-            ddb.putItem(putParams, (err,data) => {
-
-                if(err){
-                    console.log(err)
-                }else{
-                    ses.sendEmail(emailParams).promise().then((data) => {
-                        console.log("email successfully sent");
-                    })
-                    .catch((err)=>{
-                        console.log("error occured"+ err)
-                    })
-                }
-
-            });
-        }else{
-
-            let curr = new Date().getTime();
-
-            let ttl = Number(data.Item.ttl.N);
-
-            if(curr > ttl){
-
-                ddb.putItem(putParams, (err,data) => {
-
-                    if(err){
-                        console.log(err)
-                    }else{
-                        ses.sendEmail(emailParams).promise().then((data) => {
-                            console.log("email successfully sent");
-                        })
-                        .catch((err)=>{
-                            console.log("error occured"+ err)
-                        })
-                    }
-    
-                });
-
-            }else{
-                console.log('Email already sent in the last 60 mins for user ::'+email);
-            }
-
-        }
-
-    }
-
-});
+    ses.sendEmail(emailParams).promise()
+    .then(function (data) {
+        console.log(data.MessageId);
+    })
+    .catch(function (err) {
+        console.error(err, err.stack);
+    });
 };
 
 
