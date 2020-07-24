@@ -2,11 +2,12 @@ const aws = require("aws-sdk");
 var ddb = new aws.DynamoDB({ apiVersion: '2012-08-10' });
 aws.config.update({region: 'us-east-1'});
 var ses = new aws.SES();
+const uuidv4 = require('uuid/v4');
 
 exports.handler = function (event, context, callback) {
 
 let email = event.Records[0].Sns.Message;
-let id = event.Records[0].Sns.id;
+let id = uuidv4();
 let curTime = new Date().getTime();
 let ttl = 60 * 60 * 1000;
 let expTime = (curTime + ttl).toString();
