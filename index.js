@@ -51,7 +51,7 @@ var emailParams = {
         Item: {
             id: { S: email },
             ttl: { N: expTime },
-            token : { T: token}
+            token : { S: token}
         }
     };
     let queryParams = {
