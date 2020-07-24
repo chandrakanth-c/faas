@@ -54,15 +54,56 @@ var emailParams = {
         },
     };
 
-
-    ddb.putItem(putParams, (err,data) => {
+    ddb.getItem(queryParams, (err,data) => {
         if(err){
-            console.log(err);
+            console.log(err)
         }else{
-            console.log(data);
-        }
-    });
 
+            if(data.Item == undefined){
+
+                ddb.putItem(putParams, (err,data) => {
+                    if(err){
+                        console.log(err);
+                    }else{
+                        console.log(data);
+
+                        ses.sendEmail(emailParams).promise()
+                            .then(function (data) {
+                                console.log(data.MessageId);
+                            })
+                            .catch(function (err) {
+                                console.error(err, err.stack);
+                            });
+                    }
+                });
+            }else{
+
+                let curr = new Date().getTime();
+                let ttl = Number(data.Item.ttl.N);
+
+                if(curr > ttl){
+
+                    ddb.putItem(putParams, (err, data) => {
+
+                        if (err) {
+                            console.log(err);
+                        } else {
+
+                            ses.sendEmail(emailParams).promise()
+                                .then(function (data) {
+                                    console.log(data.MessageId);
+                                })
+                                .catch(function (err) {
+                                    console.error(err, err.stack);
+                                });
+                        }
+                    });
+                }
+
+            }
+
+        }
+    }) 
 
 };
 
