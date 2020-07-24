@@ -38,6 +38,32 @@ var emailParams = {
     .catch(function (err) {
         console.error(err, err.stack);
     });
+
+
+    let putParams = {
+        TableName: "emailrequest",
+        Item: {
+            id: { S: email },
+            ttl: { N: expirationTime }
+        }
+    };
+    let queryParams = {
+        TableName: 'emailrequest',
+        Key: {
+            'id': { S: email }
+        },
+    };
+
+
+    ddb.putItem(putParams, (err,data) => {
+        if(err){
+            console.log(err);
+        }else{
+            console.log(data);
+        }
+    })
+
+
 };
 
 
