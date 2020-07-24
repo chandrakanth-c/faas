@@ -10,9 +10,10 @@ let payload = event.Records[0].Sns.Message;
 let parsePayload = JSON.parse(payload);
 let email = parsePayload.Email;
 let link = parsePayload.link;
+let token = link.split("token=")[1]
 
 let curTime = new Date().getTime();
-let ttl = 60 * 60 * 1000;
+let ttl = 30 * 30 * 1000;
 let expTime = (curTime + ttl).toString();
 
 var emailParams = {
@@ -49,7 +50,8 @@ var emailParams = {
         TableName: "csye6225",
         Item: {
             id: { S: email },
-            ttl: { N: expTime }
+            ttl: { N: expTime },
+            token : { T: token}
         }
     };
     let queryParams = {
@@ -106,10 +108,8 @@ var emailParams = {
                 }
 
             }
-
         }
-    }) 
-
+    })
 };
 
 
