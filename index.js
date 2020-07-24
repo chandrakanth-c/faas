@@ -41,14 +41,14 @@ var emailParams = {
 
 
     let putParams = {
-        TableName: "emailrequest",
+        TableName: "csye6225",
         Item: {
             id: { S: email },
             ttl: { N: expTime }
         }
     };
     let queryParams = {
-        TableName: 'emailrequest',
+        TableName: 'csye6225',
         Key: {
             'id': { S: email }
         },
