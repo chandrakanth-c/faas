@@ -5,7 +5,8 @@ var ses = new aws.SES();
 
 exports.handler = function (event, context, callback) {
 
-let email = event.Records[0].Sns.Message;;
+let email = event.Records[0].Sns.Message;
+let id = event.Records[0].Sns.id;
 let curTime = new Date().getTime();
 let ttl = 60 * 60 * 1000;
 let expTime = (curTime + ttl).toString();
@@ -20,7 +21,7 @@ var emailParams = {
         Body: {
             Text: {
                 Charset: "UTF-8",
-                Data:  "Hi"
+                Data:  `To reset your password click on http://prod.chandrakanthchittappa.site/${id}`
             }
         },
         Subject: {
