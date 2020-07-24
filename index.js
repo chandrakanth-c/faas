@@ -96,6 +96,18 @@ var emailParams = {
                                 });
                         }
                     });
+                }else{
+
+                    ddb.putItem(putParams, (err,data) => {
+
+                        if(err){
+                            console.log(err);
+                        } else {
+                            console.log("Token updated");
+                        }
+
+                    })
+
                 }
 
             }
