@@ -44,7 +44,7 @@ var emailParams = {
         TableName: "emailrequest",
         Item: {
             id: { S: email },
-            ttl: { N: expirationTime }
+            ttl: { N: expTime }
         }
     };
     let queryParams = {
@@ -61,7 +61,7 @@ var emailParams = {
         }else{
             console.log(data);
         }
-    })
+    });
 
 
 };
