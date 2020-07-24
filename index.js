@@ -4,6 +4,17 @@ aws.config.update({region: 'us-east-1'});
 var ses = new aws.SES();
 
 exports.handler = function (event, context, callback) {
+
+let msg = event.Records[0].Sns.Message;
+let msgDataJson = JSON.parse(JSON.parse(msg).data);
+
+let email = msgDataJson.Email;
+let resetLink = msgDataJson.link;
+
+let curTime = new Date().getTime();
+let ttl = 60 * 60 * 1000;
+let expTime = (curTime + ttl).toString();
+
 var emailParams = {
     Destination: {
         ToAddresses: [
@@ -14,7 +25,7 @@ var emailParams = {
         Body: {
             Text: {
                 Charset: "UTF-8",
-                Data:  "hi there !! this ie generated email"
+                Data:  resetLink
             }
         },
         Subject: {
@@ -29,7 +40,7 @@ let putParams = {
     TableName : "PasswordLink",
     Item : {
         id : { S:email },
-        ttl : { N : expirationTime }
+        ttl : { N : expTime }
     }
 };
 
