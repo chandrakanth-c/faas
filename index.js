@@ -26,7 +26,7 @@ var emailParams = {
     Message: {
         Body: {
             Html: {
-                Data: `<html><head><title>Your Token</title><style>h1{color:#f00;}</style></head><body><h1>Hello,</h1><div>Your Password Reset Token is ${link}</div></body></html>`
+                Data: `<html><head><title>Your Token</title><style>h1</style></head><body><h1>Hi,</h1><div>Password Reset Token is ${link}</div></body></html>`
             }
         },
         Subject: {
