@@ -1,3 +1,4 @@
+//
 const aws = require("aws-sdk");
 var ddb = new aws.DynamoDB({ apiVersion: '2012-08-10' });
 aws.config.update({region: 'us-east-1'});
