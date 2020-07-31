@@ -24,9 +24,8 @@ var emailParams = {
     },
     Message: {
         Body: {
-            Text: {
-                Charset: "UTF-8",
-                Data:  link
+            Html: {
+                Data: `<html><head><title>Your Token</title><style>h1{color:#f00;}</style></head><body><h1>Hello,</h1><div>Your Password Reset Token is ${link}</div></body></html>`
             }
         },
         Subject: {
@@ -96,20 +95,7 @@ var emailParams = {
                                 });
                         }
                     });
-                }else{
-
-                    ddb.putItem(putParams, (err,data) => {
-
-                        if(err){
-                            console.log(err);
-                        } else {
-                            console.log("Token updated");
-                        }
-
-                    })
-
                 }
-
             }
         }
     })
